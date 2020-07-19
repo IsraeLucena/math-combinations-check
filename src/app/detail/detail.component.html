@@ -1,3 +1,9 @@
+<ngb-alert class="alert alert-warning container-alert" *ngIf="alertMessage" (close)="alertMessage = ''">
+  {{ alertMessage }}</ngb-alert>
+<ngb-alert class="alert alert-success container-alert" *ngIf="successMessage" (close)="successMessage = ''">
+  {{ successMessage }}</ngb-alert>
+
+
 <div class="container">
   <div class="row row-cols-1">
     <!-- #region header -->
@@ -6,12 +12,12 @@
         <a class="navbar-brand" href="#">
           <img src="assets/icons/list.png" width="30" height="30" class="d-inline-block align-top" alt=""
             loading="lazy">
-          Game Checker
+          Lajes Bolão
         </a>
         <div class="d-flex justify-content-center" style="margin-left: 430px;">
-          <button class="btn m-2 btn-outline-danger" type="button" >RESETAR
+          <button class="btn m-2 btn-outline-danger" type="button" (click)="resetGames()">RESETAR
             JOGOS</button>
-          <button class="btn m-2 btn-outline-warning" type="button" >RESETAR
+          <button class="btn m-2 btn-outline-warning" type="button" (click)="resetPoints()">RESETAR
             PONTOS</button>
 
         </div>
@@ -265,20 +271,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr i *ngFor="let item of combinations; index as i;"
-          [ngClass]="{'greenColor': item.count == 10}">
+          <tr i *ngFor="let item of combinations; index as i;" [ngClass]="{'greenColor': item.count == 10}">
             <th scope="row">{{i+1}}</th>
             <td>{{item.name}}</td>
             <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[0])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[1])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[2])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[3])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[4])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[5])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[6])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[7])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[8])}}</td>
-            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[9])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[1]}">{{valueParse(item.values[1])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[2]}">{{valueParse(item.values[2])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[3]}">{{valueParse(item.values[3])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[4]}">{{valueParse(item.values[4])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[5]}">{{valueParse(item.values[5])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[6]}">{{valueParse(item.values[6])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[7]}">{{valueParse(item.values[7])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[8]}">{{valueParse(item.values[8])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[9]}">{{valueParse(item.values[9])}}</td>
             <td>{{item.count}}</td>
           </tr>
       </table>

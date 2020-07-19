@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import * as _ from 'lodash'
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 interface Combination {
   name: string;
@@ -15,16 +17,37 @@ interface Combination {
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent {
+export class DetailComponent implements OnInit {
   combinations: Combination[];
   countCombinations: number;
-
+  nameListGames: string;
   constructor() {
     let count = JSON.parse(localStorage.getItem('countCombinations'));
-    this.countCombinations = count? count: 0;
+    this.countCombinations = count ? count : 0;
 
     let combs = JSON.parse(localStorage.getItem('dataSource'));
-    this.combinations = combs? combs : [];
+    this.combinations = combs ? combs : [];
+
+    this.nameListGames = 'backupDataSource' + this.countCombinations;
+  }
+
+  private _success = new Subject<string>();
+  private _alert = new Subject<string>();
+  staticAlertClosed = false;
+  successMessage = '';
+  alertMessage = '';
+
+  ngOnInit(): void {
+    setTimeout(() => this.staticAlertClosed = true, 20000);
+    this._alert.subscribe(message => this.alertMessage = message);
+    this._alert.pipe(
+      debounceTime(5000)
+    ).subscribe(() => this.alertMessage = '');
+
+    this._success.subscribe(message => this.successMessage = message);
+    this._success.pipe(
+      debounceTime(5000)
+    ).subscribe(() => this.successMessage = '');
   }
 
   valueParse(value) {
@@ -36,38 +59,47 @@ export class DetailComponent {
       element.count = 0;
       element.matches = [false, false, false, false, false, false, false, false, false, false];
     });
+
+    localStorage.setItem('dataSource', JSON.stringify(this.combinations));
+    localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+
   }
 
-  resetGames(){
+  resetGames() {
+    localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+    localStorage.setItem('countCombinations', (++this.countCombinations).toString());
+
     this.combinations = [];
     localStorage.setItem('dataSource', JSON.stringify(this.combinations));
-
   }
 
-  addCombination(f: NgForm) {
+  addCombination(newGame: NgForm) {
+    let values = [newGame.value.v1, newGame.value.v2, newGame.value.v3, newGame.value.v4, newGame.value.v5,
+    newGame.value.v6, newGame.value.v7, newGame.value.v8, newGame.value.v9, newGame.value.v10];
+    values.sort();
     let combination = {
-      name: f.value.name,
-      values: [f.value.v1, f.value.v2, f.value.v3, f.value.v4, f.value.v5,
-      f.value.v6, f.value.v7, f.value.v8, f.value.v9, f.value.v10],
+      name: newGame.value.name,
+      values: values,
       matches: [false, false, false, false, false, false, false, false, false, false],
       count: 0
     };
     let uniqValues = _.uniq(combination.values).length == 10 ? true : false;
     if (uniqValues) {
       this.combinations.push(combination);
+
       localStorage.setItem('dataSource', JSON.stringify(this.combinations));
-      alert('Jogo Adicionado!')
+      localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+      this._success.next(`Jogo Adicionado!`);
     } else {
-      alert('Algo está errado!')
+      this._success.next(`Valores Repetidos!`);
     }
 
   }
 
-  calculatePoints(comb) {
-    let premio = [comb.v1, comb.v2, comb.v3, comb.v4, comb.v5,
-    comb.v6, comb.v7, comb.v8, comb.v9, comb.v10];
-    let uniqValues = true;
-    // let uniqValues = _.uniq(premio).length == 10 ? true : false;
+  calculatePoints(prem) {
+    let premio = [prem.v1, prem.v2, prem.v3, prem.v4, prem.v5,
+    prem.v6, prem.v7, prem.v8, prem.v9, prem.v10];
+    let uniqValues = _.uniq(premio).length == 10 ? true : false;
     if (uniqValues) {
       this.combinations.forEach(game => {
         game.values.forEach(number => {
@@ -78,9 +110,13 @@ export class DetailComponent {
           }
         });
       });
-      alert('Resultado realizado!');
+
+      localStorage.setItem('dataSource', JSON.stringify(this.combinations));
+      localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+
+      this._success.next(`Resultado Realizado!`);
     } else {
-      alert('Algo está errado!');
+      this._alert.next(`Valores Repetidos!`);
     }
 
   }
