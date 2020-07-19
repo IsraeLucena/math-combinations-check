@@ -92,5 +92,10 @@
   },
   "engines": {
     "node": ">=10.13.0"
+  },
+  "dependencies": {
+    "bootstrap": "4.5.0",
+    "lodash": "4.17.19",
+    "ngx-print": "1.2.0-beta.5"
   }
 }

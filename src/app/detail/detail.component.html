@@ -1,7 +1,288 @@
 <div class="container">
-  <h1 class="title">
-    {{ 'PAGES.DETAIL.TITLE' | translate }}
-  </h1>
+  <div class="row row-cols-1">
+    <!-- #region header -->
+    <div class="col mt-2 p-0">
+      <nav class="navbar navbar-dark bg-dark rounded shadow">
+        <a class="navbar-brand" href="#">
+          <img src="assets/icons/list.png" width="30" height="30" class="d-inline-block align-top" alt=""
+            loading="lazy">
+          Game Checker
+        </a>
+        <div class="d-flex justify-content-center" style="margin-left: 430px;">
+          <button class="btn m-2 btn-outline-danger" type="button" >RESETAR
+            JOGOS</button>
+          <button class="btn m-2 btn-outline-warning" type="button" >RESETAR
+            PONTOS</button>
 
-  <a routerLink="/">{{ 'PAGES.DETAIL.BACK_TO_HOME' | translate }}</a>
+        </div>
+
+        <a routerLink="/" style="color: white;">Sair</a>
+
+      </nav>
+    </div>
+    <!-- #endregion -->
+    <div class="col mt-3 card p-2 shadow">
+      <!-- #region sorteio -->
+
+      <div class="mt-1 p-2 rounded shadow-sm" style="color: white; background-color: #85888c;">
+        DEZENAS SORTEADAS
+      </div>
+
+      <div class="mt-3 row">
+        <div class="col">
+          <form #combination="ngForm" (ngSubmit)="calculatePoints(combination.value)">
+            <div class="d-flex justify-content-between">
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">1º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v1" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">2º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v2" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">3º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v3" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">4º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v4" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">5º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v5" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">6º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v6" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">7º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v7" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">8º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v8" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">9º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v9" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">10º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v10" ngModel required
+                  type="number" class="form-control">
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button
+                [ngClass]="{'disabled btn-secondary': !combination.valid, 'btn-outline-success': combination.valid }"
+                class="btn m-2" type="submit" [disabled]="!combination.valid" style="width: 30%;">CHECAR
+                DEZENAS</button>
+            </div>
+
+            <!-- <p>First name value: {{ first.value }}</p>
+            <p>First name valid: {{ first.valid }}</p>
+            <p>Form value: {{ combination.value | json }}</p>
+            <p>Form valid: {{ combination.valid }}</p> -->
+          </form>
+        </div>
+      </div>
+      <!-- #endregion -->
+      <hr>
+      <!-- #region new player -->
+      <div class="p-2 rounded shadow-sm" style="color: white; background-color: #85888c;">
+        NOVO JOGO
+      </div>
+      <div class="mt-3 row">
+        <div class="col">
+          <form #game="ngForm" (ngSubmit)="addCombination(game)">
+            <div class="row">
+              <div class="col">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Participante: </span>
+                  </div>
+                  <input name="name" ngModel minlength="3" required #first="ngModel" type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">1º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v1" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">2º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v2" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">3º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v3" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">4º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v4" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">5º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v5" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">6º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v6" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">7º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v7" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">8º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v8" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">9º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v9" ngModel required
+                  type="number" class="form-control">
+              </div>
+              <div class="input-group mb-3 value">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">10º</span>
+                </div>
+                <input type=range min=0 max=99 step=1
+                  onchange="if(parseInt(this.value,10)<10)this.value='0'+this.value;" name="v10" ngModel required
+                  type="number" class="form-control">
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button class="btn mt-2"
+                [ngClass]="{'disabled btn-secondary': !game.valid, 'btn-outline-primary': game.valid }" type="submit"
+                id="button-addon1" style="width: 30%;" [disabled]="!game.valid">ADICIONAR JOGO</button>
+            </div>
+
+          </form>
+          <!-- <p>First name value: {{ first.value }}</p>
+          <p>First name valid: {{ first.valid }}</p>
+          <p>Form value: {{ game.value | json }}</p>
+          <p>Form valid: {{ game.valid }}</p>
+          <p>{{ gameData |json }}</p> -->
+        </div>
+      </div>
+      <!-- #endregion -->
+    </div>
+    <div class="col mt-3 card p-2 shadow">
+      <!-- #region table -->
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">1º</th>
+            <th scope="col">2º</th>
+            <th scope="col">3º</th>
+            <th scope="col">4º</th>
+            <th scope="col">5º</th>
+            <th scope="col">6º</th>
+            <th scope="col">7º</th>
+            <th scope="col">8º</th>
+            <th scope="col">9º</th>
+            <th scope="col">10º</th>
+            <th scope="col">Pontos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr i *ngFor="let item of combinations; index as i;"
+          [ngClass]="{'greenColor': item.count == 10}">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.name}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[0])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[1])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[2])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[3])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[4])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[5])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[6])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[7])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[8])}}</td>
+            <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[9])}}</td>
+            <td>{{item.count}}</td>
+          </tr>
+      </table>
+      <!-- #endregion -->
+    </div>
+  </div>
 </div>
