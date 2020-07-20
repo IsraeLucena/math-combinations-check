@@ -74,9 +74,18 @@ export class DetailComponent implements OnInit {
   }
 
   addCombination(newGame: NgForm) {
-    let values = [newGame.value.v1, newGame.value.v2, newGame.value.v3, newGame.value.v4, newGame.value.v5,
-    newGame.value.v6, newGame.value.v7, newGame.value.v8, newGame.value.v9, newGame.value.v10];
+    let maiorQ99 = false;
+    let menorQ0 = false;
+    let values = newGame.value.dezenas.split("-");
     values.sort();
+    values.forEach(element => {
+      if (parseInt(element, 10) > 99) {
+        maiorQ99 = true;
+      }
+      if (parseInt(element, 10) < 0) {
+        menorQ0 = true;
+      }
+    });
     let combination = {
       name: newGame.value.name,
       values: values,
@@ -84,27 +93,43 @@ export class DetailComponent implements OnInit {
       count: 0
     };
     let uniqValues = _.uniq(combination.values).length == 10 ? true : false;
-    if (uniqValues) {
+    if (uniqValues && !menorQ0 && !maiorQ99) {
       this.combinations.push(combination);
-
       localStorage.setItem('dataSource', JSON.stringify(this.combinations));
       localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
-      this._success.next(`Jogo Adicionado!`);
-    } else {
-      this._success.next(`Valores Repetidos!`);
-    }
 
+      this._success.next(`Jogo Adicionado!`);
+    } else if (menorQ0) {
+      this._alert.next(`Valores Menor Que Zero!`);
+    } else if (maiorQ99) {
+      this._alert.next(`Valores Maior Que Zero!`);
+    } else {
+      this._alert.next(`Valores Repetidos!`);
+    }
   }
 
   calculatePoints(prem) {
-    let premio = [prem.v1, prem.v2, prem.v3, prem.v4, prem.v5,
-    prem.v6, prem.v7, prem.v8, prem.v9, prem.v10];
+    let maiorQ99 = false;
+    let menorQ0 = false;
+    // let premio = [prem.v1, prem.v2, prem.v3, prem.v4, prem.v5,
+    // prem.v6, prem.v7, prem.v8, prem.v9, prem.v10];
+    let premio = prem.value.dezenas.split("-");
+
+    premio.forEach(element => {
+      if (parseInt(element, 10) > 99) {
+        maiorQ99 = true;
+      }
+      if (parseInt(element, 10) < 0) {
+        menorQ0 = true;
+      }
+    });
+
     let uniqValues = _.uniq(premio).length == 10 ? true : false;
-    if (uniqValues) {
+    if (uniqValues && !menorQ0 && !maiorQ99) {
       this.combinations.forEach(game => {
         game.values.forEach(number => {
-          if (premio.includes(number)) {
-            let position = game.values.indexOf(number);
+          let position = game.values.indexOf(number);
+          if (premio.includes(number) && !game.matches[position]) {
             game.matches[position] = true;
             ++game.count;
           }
@@ -115,10 +140,12 @@ export class DetailComponent implements OnInit {
       localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
 
       this._success.next(`Resultado Realizado!`);
+    } else if (menorQ0) {
+      this._alert.next(`Valores Menor Que Zero!`);
+    } else if (maiorQ99) {
+      this._alert.next(`Valores Maior Que Zero!`);
     } else {
       this._alert.next(`Valores Repetidos!`);
     }
-
   }
-
 }
