@@ -21,12 +21,17 @@ export class DetailComponent implements OnInit {
   combinations: Combination[];
   countCombinations: number;
   nameListGames: string;
+  premiosList: number[][];
+
   constructor() {
     let count = JSON.parse(localStorage.getItem('countCombinations'));
     this.countCombinations = count ? count : 0;
 
     let combs = JSON.parse(localStorage.getItem('dataSource'));
     this.combinations = combs ? combs : [];
+
+    let premiosList = JSON.parse(localStorage.getItem('premiosList'));
+    this.premiosList = premiosList ? premiosList : [];
 
     this.nameListGames = 'backupDataSource' + this.countCombinations;
   }
@@ -59,9 +64,10 @@ export class DetailComponent implements OnInit {
       element.count = 0;
       element.matches = [false, false, false, false, false, false, false, false, false, false];
     });
-
+    this.premiosList = [];
     localStorage.setItem('dataSource', JSON.stringify(this.combinations));
     localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+    localStorage.setItem('premiosList', JSON.stringify(this.premiosList));
 
   }
 
@@ -69,8 +75,12 @@ export class DetailComponent implements OnInit {
     localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
     localStorage.setItem('countCombinations', (++this.countCombinations).toString());
 
+    this.premiosList = [];
     this.combinations = [];
+
     localStorage.setItem('dataSource', JSON.stringify(this.combinations));
+    localStorage.setItem('premiosList', JSON.stringify(this.premiosList));
+
   }
 
   addCombination(newGame: NgForm) {
@@ -111,8 +121,7 @@ export class DetailComponent implements OnInit {
   calculatePoints(prem) {
     let maiorQ99 = false;
     let menorQ0 = false;
-    // let premio = [prem.v1, prem.v2, prem.v3, prem.v4, prem.v5,
-    // prem.v6, prem.v7, prem.v8, prem.v9, prem.v10];
+
     let premio = prem.value.dezenas.split("-");
 
     premio.forEach(element => {
@@ -124,8 +133,9 @@ export class DetailComponent implements OnInit {
       }
     });
 
-    let uniqValues = _.uniq(premio).length == 10 ? true : false;
+    let uniqValues = _.uniq(premio).length == 5 ? true : false;
     if (uniqValues && !menorQ0 && !maiorQ99) {
+      this.premiosList.push(premio);
       this.combinations.forEach(game => {
         game.values.forEach(number => {
           let position = game.values.indexOf(number);
@@ -138,6 +148,7 @@ export class DetailComponent implements OnInit {
 
       localStorage.setItem('dataSource', JSON.stringify(this.combinations));
       localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+      localStorage.setItem('premiosList', JSON.stringify(this.premiosList));
 
       this._success.next(`Resultado Realizado!`);
     } else if (menorQ0) {

@@ -43,10 +43,9 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">Dezenas: </span>
                   </div>
-                  <input name="dezenas" ngModel minlength="29" maxlength="29"
-                    pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}"
-                    required #first="ngModel" type="text" class="form-control"
-                    placeholder="00-01-02-03-04-05-06-07-08-09">
+                  <input name="dezenas" ngModel minlength="14" maxlength="14"
+                    pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" required #first="ngModel" type="text"
+                    class="form-control" placeholder="00-01-02-03-04">
                 </div>
               </div>
             </div>
@@ -62,6 +61,16 @@
             <p>Form value: {{ combination.value | json }}</p>
             <p>Form valid: {{ combination.valid }}</p> -->
           </form>
+        </div>
+        <div class="col">
+          <div class="row rounded shadow-sm pl-2 mr-2" style="color: white; background-color: #c2c3c5;">
+            RESULTADOS LANÇADOS
+          </div>
+          <div class="row">
+            <div class="col-4" *ngFor="let item of premiosList; index as i;">
+              {{i}} - [{{item}}]
+            </div>
+          </div>
         </div>
       </div>
       <!-- #endregion -->
