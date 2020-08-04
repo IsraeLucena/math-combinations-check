@@ -1,11 +1,11 @@
 {
-  "name": "angular-electron",
-  "version": "1.1.0",
-  "description": "Angular 10 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "Combinations",
+  "version": "1.2.0",
+  "description": "",
+  "homepage": "",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Israel Lucena",
+    "email": "israelclucena@gmail.com"
   },
   "keywords": [
     "angular",

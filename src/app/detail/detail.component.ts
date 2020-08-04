@@ -159,4 +159,16 @@ export class DetailComponent implements OnInit {
       this._alert.next(`Valores Repetidos!`);
     }
   }
+
+  delete(position: number) {
+    if (confirm('Deseja remover essa combinação?')) {
+      const removed = _.remove(this.combinations, this.combinations[position])
+      console.log('removed', removed)
+      console.log('list', this.combinations)
+      console.log('Thing was saved to the database.');
+    }
+
+    // localStorage.setItem('dataSource', JSON.stringify(this.combinations));
+    // localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
+  }
 }
