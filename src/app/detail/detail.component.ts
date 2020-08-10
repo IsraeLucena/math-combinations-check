@@ -4,6 +4,9 @@ import { NgForm } from '@angular/forms';
 import * as _ from 'lodash'
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { FilterPipe } from 'ngx-filter-pipe';
+import * as jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 interface Combination {
   name: string;
@@ -23,7 +26,11 @@ export class DetailComponent implements OnInit {
   nameListGames: string;
   premiosList: number[][];
 
-  constructor() {
+  userFilter: any = { name: '' };
+
+  constructor(
+    private filterPipe: FilterPipe
+  ) {
     let count = JSON.parse(localStorage.getItem('countCombinations'));
     this.countCombinations = count ? count : 0;
 
@@ -68,7 +75,6 @@ export class DetailComponent implements OnInit {
     localStorage.setItem('dataSource', JSON.stringify(this.combinations));
     localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
     localStorage.setItem('premiosList', JSON.stringify(this.premiosList));
-
   }
 
   resetGames() {
@@ -80,7 +86,6 @@ export class DetailComponent implements OnInit {
 
     localStorage.setItem('dataSource', JSON.stringify(this.combinations));
     localStorage.setItem('premiosList', JSON.stringify(this.premiosList));
-
   }
 
   addCombination(newGame: NgForm) {
@@ -121,7 +126,6 @@ export class DetailComponent implements OnInit {
   calculatePoints(prem) {
     let maiorQ99 = false;
     let menorQ0 = false;
-
     let premio = prem.value.dezenas.split("-");
 
     premio.forEach(element => {
@@ -163,12 +167,17 @@ export class DetailComponent implements OnInit {
   delete(position: number) {
     if (confirm('Deseja remover essa combinação?')) {
       const removed = _.remove(this.combinations, this.combinations[position])
-      console.log('removed', removed)
-      console.log('list', this.combinations)
-      console.log('Thing was saved to the database.');
+
+      localStorage.setItem('dataSource', JSON.stringify(this.combinations));
+      localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
     }
 
-    // localStorage.setItem('dataSource', JSON.stringify(this.combinations));
-    // localStorage.setItem(this.nameListGames, JSON.stringify(this.combinations));
   }
+
+  public downloadAsPDF() {
+    const doc = new jsPDF()
+    autoTable(doc, { html: '#pdfTable' })
+    doc.save('tabeladejogos.pdf')
+  }
+
 }

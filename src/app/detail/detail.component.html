@@ -3,7 +3,6 @@
 <ngb-alert class="alert alert-success container-alert" *ngIf="successMessage" (close)="successMessage = ''">
   {{ successMessage }}</ngb-alert>
 
-
 <div class="container">
   <div class="row row-cols-1">
     <!-- #region header -->
@@ -19,21 +18,16 @@
             JOGOS</button>
           <button class="btn m-2 btn-outline-warning" type="button" (click)="resetPoints()">RESETAR
             PONTOS</button>
-
         </div>
-
         <a routerLink="/" style="color: white;">Sair</a>
-
       </nav>
     </div>
     <!-- #endregion -->
     <div class="col mt-3 card p-2 shadow">
       <!-- #region sorteio -->
-
       <div class="mt-1 p-2 rounded shadow-sm" style="color: white; background-color: #85888c;">
         DEZENAS SORTEADAS
       </div>
-
       <div class="mt-3 row">
         <div class="col">
           <form #combination="ngForm" (ngSubmit)="calculatePoints(combination);combination.resetForm()">
@@ -55,11 +49,6 @@
                 class="btn m-2" type="submit" [disabled]="!combination.valid" style="width: 30%;">CHECAR
                 DEZENAS</button>
             </div>
-
-            <!-- <p>First name value: {{ first.value }}</p>
-            <p>First name valid: {{ first.valid }}</p>
-            <p>Form value: {{ combination.value | json }}</p>
-            <p>Form valid: {{ combination.valid }}</p> -->
           </form>
         </div>
         <div class="col">
@@ -77,7 +66,6 @@
       <hr>
       <!-- #region new player -->
       <div class="p-2 rounded shadow-sm" style="color: white; background-color: #85888c;">
-        <!-- <div class="d-flex justify-content-between"> -->
         NOVO JOGO
       </div>
       <div class="p-2 rounded shadow-sm" style="font-size: 11px; font-weight: 700;">
@@ -116,17 +104,19 @@
             </div>
 
           </form>
-          <!-- <p>First name value: {{ first.value }}</p>
-          <p>First name valid: {{ first.valid }}</p>
-          <p>Form value: {{ game.value | json }}</p>
-          <p>Form valid: {{ game.valid }}</p>
-          <p>{{ gameData |json }}</p> -->
         </div>
       </div>
       <!-- #endregion -->
     </div>
+    <!-- #region table -->
     <div class="col mt-3 card p-2 shadow">
-      <!-- #region table -->
+      <div class="d-flex justify-content-between">
+
+        <input class="mt-3 mr-3 mb-3 form-control w-75" type="text" [(ngModel)]="userFilter.name"
+          placeholder="Digite o nome do jogador">
+
+        <button class="mt-3 mb-3 btn btn-outline-primary w-25" (click)="downloadAsPDF()">Gerar PDF</button>
+      </div>
       <table class="table">
         <thead>
           <tr>
@@ -146,9 +136,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr i *ngFor="let item of combinations; index as i;" [ngClass]="{'greenColor': item.count == 10}">
+          <tr *ngIf="(combinations | filterBy: userFilter).length === 0">
+            <th scope="row"></th>
+            <td>
+              Jogador não encontrado
+            </td>
+          </tr>
+          <tr *ngFor="let item of combinations| filterBy: userFilter; index as i;"
+            [ngClass]="{'greenColor': item.count == 10}">
             <th scope="row">{{i+1}}</th>
-            <td>{{item.name}}</td>
+            <td>
+              {{item.name}}
+            </td>
             <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[0])}}</td>
             <td [ngClass]="{'greenColor': item.matches[1]}">{{valueParse(item.values[1])}}</td>
             <td [ngClass]="{'greenColor': item.matches[2]}">{{valueParse(item.values[2])}}</td>
@@ -168,7 +167,55 @@
             </td>
           </tr>
       </table>
-      <!-- #endregion -->
     </div>
+    <!-- #endregion -->
   </div>
 </div>
+
+<!-- #region print-table -->
+
+<div class="col-md-8 d-none">
+  <table id="pdfTable" #pdfTable class="table table-bordered">
+    <thead>
+      <tr class="table-primary" style="height: 100px;">
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">1º</th>
+        <th scope="col">2º</th>
+        <th scope="col">3º</th>
+        <th scope="col">4º</th>
+        <th scope="col">5º</th>
+        <th scope="col">6º</th>
+        <th scope="col">7º</th>
+        <th scope="col">8º</th>
+        <th scope="col">9º</th>
+        <th scope="col">10º</th>
+        <th scope="col">Pontos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of combinations| filterBy: userFilter; index as i;"
+        [ngClass]="{'greenColor': item.count == 10}">
+        <th scope="row">{{i+1}}</th>
+        <td>
+          {{item.name}}
+        </td>
+        <td [ngClass]="{'greenColor': item.matches[0]}">{{valueParse(item.values[0])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[1]}">{{valueParse(item.values[1])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[2]}">{{valueParse(item.values[2])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[3]}">{{valueParse(item.values[3])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[4]}">{{valueParse(item.values[4])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[5]}">{{valueParse(item.values[5])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[6]}">{{valueParse(item.values[6])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[7]}">{{valueParse(item.values[7])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[8]}">{{valueParse(item.values[8])}}</td>
+        <td [ngClass]="{'greenColor': item.matches[9]}">{{valueParse(item.values[9])}}</td>
+        <td>
+          <div class="d-flex justify-content-between">
+            {{item.count}}
+          </div>
+        </td>
+      </tr>
+  </table>
+</div>
+<!-- #endregion -->

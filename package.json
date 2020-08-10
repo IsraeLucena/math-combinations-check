@@ -1,6 +1,6 @@
 {
   "name": "Combinations",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "",
   "homepage": "",
   "author": {
@@ -97,7 +97,10 @@
     "@angular/localize": "10.0.3",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "bootstrap": "4.5.0",
+    "jspdf": "1.5.3",
+    "jspdf-autotable": "3.5.6",
     "lodash": "4.17.19",
+    "ngx-filter-pipe": "2.1.2",
     "ngx-print": "1.2.0-beta.5"
   }
 }

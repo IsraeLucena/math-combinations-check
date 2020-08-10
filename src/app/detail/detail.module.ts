@@ -5,10 +5,11 @@ import { DetailRoutingModule } from './detail-routing.module';
 
 import { DetailComponent } from './detail.component';
 import { SharedModule } from '../shared/shared.module';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [DetailComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [CommonModule, SharedModule, DetailRoutingModule]
+  imports: [CommonModule, SharedModule, DetailRoutingModule, FilterPipeModule]
 })
 export class DetailModule {}
