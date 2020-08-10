@@ -139,7 +139,7 @@
           <tr *ngIf="(combinations | filterBy: userFilter).length === 0">
             <th scope="row"></th>
             <td>
-              Jogador não encontrado
+              Sem jogadores na lista.
             </td>
           </tr>
           <tr *ngFor="let item of combinations| filterBy: userFilter; index as i;"
